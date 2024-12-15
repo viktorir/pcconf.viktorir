@@ -31,7 +31,7 @@ export default createStore({
       commit('SET_ERROR', null)
 
       try {
-        const res = await axios.get('http://localhost:8081/api/v1/configs');
+        const res = await axios.get('http://localhost:8083/api/v1/configs');
         let body = res.data
         commit('SET_CONFIGS', body.data)
       } catch(e) {

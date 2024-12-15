@@ -8,7 +8,7 @@ import (
 )
 
 func GetFullConfigs(ctx *fiber.Ctx) error {
-	configs, err := model.GetFullConfigs()
+	configs, err := model.GetFullConfigs(1, 15)
 	if err != nil {
 		return err
 	}

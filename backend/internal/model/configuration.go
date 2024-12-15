@@ -19,12 +19,12 @@ type PCConfigurationCard struct {
 	Case        CaseTiny         `json:"case"`
 }
 
-func GetFullConfigs() (configs []PCConfigurationCard, err error) {
+func GetFullConfigs(page, limit int) (configs []PCConfigurationCard, err error) {
 	query, err := database.ReadSQLFile("internal/model/queries/get_full_pc_configurations.sql")
 	if err != nil {
 		return nil, err
 	}
-	rows, err := database.Sql.Query(query)
+	rows, err := database.Sql.Query(query, limit, (page-1)*limit)
 	if err != nil {
 		return nil, err
 	}

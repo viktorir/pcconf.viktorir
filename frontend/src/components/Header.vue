@@ -1,5 +1,3 @@
-
-/* eslint-disable */
 <template>
     <header>
         <nav>
@@ -9,13 +7,28 @@
         </nav>
         <div>
             <button>Search</button>
-            <button>Sign In</button>
+            <a href="http://localhost:8081/signin?redirect_url=http://localhost:8080">Sign In</a>
         </div>
     </header>
 </template>
 
 <script>
-
+export default {
+  data() {
+    return {
+      showModal: false,
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    submitForm() {
+      console.log("Email:", this.email);
+      console.log("Password:", this.password);
+      this.showModal = false; // Закрыть модальное окно после отправки
+    },
+  },
+}
 </script>
 
 <style scoped>
@@ -60,6 +73,18 @@ nav {
 }
 
 button {
+    padding: 8px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFFFFF;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+a{
+    all: unset;
+
     padding: 8px;
     border: none;
     font-size: 16px;

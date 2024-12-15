@@ -28,4 +28,6 @@ FROM public.pc_configuration pc
          LEFT JOIN public.psus AS psu ON pc.psu_id = psu.id_psu
          LEFT JOIN public.storages AS storage ON pc.storage_id = storage.id_storage
          LEFT JOIN public.cases AS cases ON pc.case_id = cases.id_case
-ORDER BY id_config DESC;
+ORDER BY id_config ASC
+LIMIT $1
+OFFSET $2;
