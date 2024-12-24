@@ -1,96 +1,71 @@
 <template>
-    <header>
-        <nav>
-            <router-link to="/" id="main_page">pc-conf</router-link>
-            <router-link to="/readymade" id="ready_made">Ready-made</router-link>
-            <router-link to="/configurator" id="configurator">Configurator</router-link>
-        </nav>
+  <n-layout>
+    <n-layout-header>
+      <nav style="display: flex; justify-content: space-between; align-items: center; padding: 8px 16px;">
         <div>
-            <button>Search</button>
-            <a href="http://localhost:8081/signin?redirect_url=http://localhost:8080">Sign In</a>
+          <router-link to="/" id="main_page" style="margin-right: 16px;">pc-conf</router-link>
+          <router-link to="/readymade" id="ready_made" style="margin-right: 16px;">Ready-made</router-link>
+          <router-link to="/configurator" id="configurator">Configurator</router-link>
         </div>
-    </header>
+
+
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <a href="https://sso.viktorir.ru/signin?redirect_url=https://pcconf.viktorir.ru" style="text-decoration: none;">
+            <n-button>Sign In</n-button>
+          </a>
+
+          <n-button-group>
+            <n-button @click="setLocale('ru')" :type="locale === 'ru' ? 'primary' : 'default'">
+              Ru
+            </n-button>
+            <n-button @click="setLocale('en')" :type="locale === 'en' ? 'primary' : 'default'">
+              En
+            </n-button>
+          </n-button-group>
+
+          <n-button-group>
+            <n-button @click="setTheme('dark')" :type="theme === 'dark' ? 'primary' : 'default'">
+              <template #icon>
+                <n-icon><moon-outline /></n-icon>
+              </template>
+            </n-button>
+            <n-button @click="setTheme('light')" :type="theme === 'light' ? 'primary' : 'default'">
+              <template #icon>
+                <n-icon><sunny-outline /></n-icon>
+              </template>
+            </n-button>
+          </n-button-group>
+        </div>
+      </nav>
+    </n-layout-header>
+  </n-layout>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+import { NLayout, NLayoutHeader, NButtonGroup, NButton, NIcon } from 'naive-ui';
+import { MoonOutline, SunnyOutline } from '@vicons/ionicons5';
+
 export default {
-  data() {
-    return {
-      showModal: false,
-      email: "",
-      password: "",
-    };
+  components: {
+    NLayout,
+    NLayoutHeader,
+    NButtonGroup,
+    NButton,
+    NIcon,
+    MoonOutline,
+    SunnyOutline,
+  },
+  computed: {
+    ...mapGetters('settings', ['theme', 'locale']),
   },
   methods: {
-    submitForm() {
-      console.log("Email:", this.email);
-      console.log("Password:", this.password);
-      this.showModal = false; // Закрыть модальное окно после отправки
+    ...mapActions('settings', ['setTheme', 'setLocale']),
+  },
+  watch: {
+    locale(newLocale) {
+      this.$i18n.locale = newLocale;
     },
   },
-}
+};
 </script>
-
-<style scoped>
-header {
-    height: 80px;
-    padding: 8px 10%;
-    background-color: #404040;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-nav {
-    
-}
-
-#main_page {
-    padding: 8px;
-    background-color: #E31C25;
-    color: #FFFFFF;
-    font-size: 32px;
-    text-decoration: none;
-    border-radius: 8px;
-}
-
-#ready_made {
-    padding: 8px;
-    color: #FFFFFF;
-    font-size: 16px;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-#configurator {
-    padding: 8px;
-    color: #FFFFFF;
-    font-size: 16px;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-button {
-    padding: 8px;
-    border: none;
-    font-size: 16px;
-    font-weight: bold;
-    color: #FFFFFF;
-    background-color: transparent;
-    cursor: pointer;
-}
-
-a{
-    all: unset;
-
-    padding: 8px;
-    border: none;
-    font-size: 16px;
-    font-weight: bold;
-    color: #FFFFFF;
-    background-color: transparent;
-    cursor: pointer;
-}
-</style>

@@ -1,36 +1,80 @@
 <template>
-  <h2>Ready-made community configurations</h2>
-  <div v-if="loading">Загрузка...</div>
-  <div v-if="error">{{ error }}</div>
-  <div v-if="configs.length" class="carousel">
-    <button @click="scrollLeft" class="scroll-button">←</button>
-    <div class="card-container" ref="cardContainer">
-      <div class="card" v-for="(config, i) in displayedConfigs" :key="config.id_config">
-        <img src="@/assets/image.png" alt="pc">
-        <div id="name_row">
-          <h3>{{ config.name }}</h3>
-          <button>stngs</button>
-        </div>
-        <p>{{ config.description }}</p>
-        <p>{{ config.cpu.name }}</p>
-        <p>{{ config.card.name }}</p>
-        <p>{{ config.ram.name }}</p>
-        <p>{{ config.storage.name }}</p>
-      </div>
-    </div>
-    <button @click="scrollRight" class="scroll-button">→</button>
-  </div>
-  <h2>Create your own configuration</h2>
-  <button>Configurate</button>
+  <n-flex vertical align="center" style="margin: 0 1em;">
+      <n-h2 style="margin-top: 1em;">Ready-made community configurations</n-h2>
+
+      <n-spin :show="loading" size="large" description="Loading..." style="margin-bottom: 20px;">
+        <template #default>
+          <n-alert v-if="error" type="error" style="margin-bottom: 20px;">
+            {{ error }}
+          </n-alert>
+
+          <div v-if="configs.length" class="carousel">
+            <n-button @click="scrollLeft" circle size="small" style="margin-right: 10px;">←</n-button>
+            <div class="card-container" ref="cardContainer">
+              <n-card
+                v-for="(config, i) in displayedConfigs"
+                :key="config.id_config"
+                style="margin: 10px; width: 300px;"
+              >
+                <img src="@/assets/image.png" alt="pc" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px;" />
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <n-h4>{{ config.name }}</n-h4>
+                  <n-button size="small" type="default">Settings</n-button>
+                </div>
+
+                <n-descriptions size="small" column="1">
+                  <n-descriptions-item label="Description">{{ config.description }}</n-descriptions-item>
+                  <n-descriptions-item label="CPU">{{ config.cpu.name }}</n-descriptions-item>
+                  <n-descriptions-item label="GPU">{{ config.card.name }}</n-descriptions-item>
+                  <n-descriptions-item label="RAM">{{ config.ram.name }}</n-descriptions-item>
+                  <n-descriptions-item label="Storage">{{ config.storage.name }}</n-descriptions-item>
+                </n-descriptions>
+              </n-card>
+            </div>
+            <n-button @click="scrollRight" circle size="small" style="margin-left: 10px;">→</n-button>
+          </div>
+
+          <n-alert v-else type="info">No configurations available.</n-alert>
+        </template>
+      </n-spin>
+
+      <n-h2>Create your own configuration</n-h2>
+      <n-button type="primary" @click="navigateToConfigurator">Configurate</n-button>
+  </n-flex>
 </template>
 
 <script>
+import {
+  NCard,
+  NSpin,
+  NAlert,
+  NButton,
+  NH2,
+  NH4,
+  NText,
+  NFlex,
+  NDescriptions,
+  NDescriptionsItem
+} from 'naive-ui';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
+  components: {
+    NCard,
+    NSpin,
+    NAlert,
+    NButton,
+    NH2,
+    NH4,
+    NText,
+    NFlex,
+    NDescriptions,
+    NDescriptionsItem
+  },
   data() {
     return {
-      currentIndex: 0,
+      currentIndex: 0, 
     };
   },
   computed: {
@@ -42,80 +86,31 @@ export default {
   methods: {
     ...mapActions(['fetchConfigs']),
     scrollLeft() {
-      if (this.currentIndex > 0) {
-        this.currentIndex--;
-      }
+      if (this.currentIndex > 0) this.currentIndex--;
     },
     scrollRight() {
-      if (this.currentIndex < this.configs.length - 3) {
-        this.currentIndex++;
-      }
+      if (this.currentIndex < this.configs.length - 3) this.currentIndex++;
+    },
+    navigateToConfigurator() {
+      this.$router.push('/configurator');
     },
   },
   mounted() {
+    // Загружаем конфигурации при монтировании
     this.fetchConfigs();
-  }
+  },
 };
 </script>
 
 <style scoped>
-h2 {
-  color: #FFFFFF;
-}
-
 .carousel {
-  padding: 0 10%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  margin-bottom: 20px;
 }
-
-.card-container { 
+.card-container {
   display: flex;
-  overflow: hidden;
-}
-
-.card {
-  width: 286px;
-  min-width: 80px;
-
-  padding: 8px;
-  margin: 5px;
-
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  
-  img {
-    max-width: 100%;
-
-    border-bottom: #404040 solid 2px;
-  }
-
-  h3 {
-    color: #E31C25;
-  }
-  p {
-    margin-bottom: 0;
-    padding-bottom: 8px;
-    color: #FFFFFF;
-    border-bottom: #404040 solid 2px;
-
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  #name_row {
-    padding-bottom: 4px;
-    display: flex;
-    justify-content: space-between;
-
-    border-bottom: #404040 solid 2px;
-  }
-}
-
-.scroll-button {
-  cursor: pointer;
-  padding: 10px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
 }
 </style>

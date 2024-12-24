@@ -20,10 +20,10 @@ func Run() {
 	})
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
-		AllowOrigins:     "http://localhost, http://localhost:8080, http://localhost:8081",
+		AllowOrigins:     "https://pcconf.viktorir.ru,https://sso.viktorir.ru,http://localhost:8080",
 	}))
 
 	router.Setup(app)
 
-	log.Fatal(app.Listen(":" + "8083"))
+	log.Fatal(app.Listen(":80"))
 }

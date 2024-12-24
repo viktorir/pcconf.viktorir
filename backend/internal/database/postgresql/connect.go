@@ -3,6 +3,7 @@ package postgresql
 import (
 	"database/sql"
 	"fmt"
+	"os"
 	"pcconf.viktorir/internal/database"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -18,22 +19,12 @@ type Config struct {
 
 func Connect() (err error) {
 	cfg := Config{
-		"localhost",
-		"5432",
-		"postgres",
-		"235711",
-		"test",
+		host:     os.Getenv("PGSQL_HOST"),
+		port:     os.Getenv("PGSQL_PORT"),
+		user:     os.Getenv("PGSQL_USER"),
+		password: os.Getenv("PGSQL_PASSWORD"),
+		dbname:   os.Getenv("PGSQL_DBNAME"),
 	}
-
-	/*
-		config := Config{
-			host:     os.Getenv("PGSQL_HOST"),
-			port:     os.Getenv("PGSQL_PORT"),
-			user:     os.Getenv("PGSQL_USER"),
-			password: os.Getenv("PGSQL_PASSWORD"),
-			dbname:   os.Getenv("PGSQL_DBNAME"),
-		}
-	*/
 
 	connString := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",

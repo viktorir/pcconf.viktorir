@@ -17,6 +17,12 @@ func Setup(app *fiber.App) {
 
 	v1 := api.Group("/v1")
 	v1.Get("/ping", handler.Ping)
-	v1.Get("/configs", handler.GetFullConfigs)
-	v1.Get("/config", handler.GetConfig)
+
+	configs := v1.Group("/configs")
+	configs.Get("/", handler.GetConfigs)
+	configs.Get("/:id", handler.GetConfig)
+	configs.Post("/", handler.CreateConfig)
+	configs.Put("/:id", handler.UpdateConfig)
+	configs.Delete("/:id", handler.DeleteConfig)
+
 }

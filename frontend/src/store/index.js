@@ -1,5 +1,7 @@
 import { createStore } from 'vuex';
-import axios from 'axios';
+import api from '@/api/api'
+import settings from './modules/settings';
+import readyMade from './modules/readyMade';
 
 export default createStore({
   state() {
@@ -31,9 +33,9 @@ export default createStore({
       commit('SET_ERROR', null)
 
       try {
-        const res = await axios.get('http://localhost:8083/api/v1/configs');
+        const res = await api.get('/configs?page=1&limit=6');
         let body = res.data
-        commit('SET_CONFIGS', body.data)
+        commit('SET_CONFIGS', body.configs)
       } catch(e) {
         commit('SET_ERROR', e.message)
         console.error('Error fetching configs:', e);
@@ -43,5 +45,7 @@ export default createStore({
     }
   },
   modules: {
+    settings,
+    readyMade
   }
 })

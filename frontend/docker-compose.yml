@@ -1,0 +1,9 @@
+version: '3.9'
+
+services:
+  pcconf_viktorir_frontend:
+    image: viktorir/pcconf.viktorir_frontend
+    container_name: pcconf_viktorir_frontend
+    ports:
+      - 80:80
+    restart: unless-stopped
